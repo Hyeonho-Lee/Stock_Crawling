@@ -66,7 +66,7 @@ def create_csv(data, csv):
         if os.path.isfile(csv):
             result.to_csv(csv, mode = 'a', header = False)
             re_result = pd.read_csv(csv, index_col = 0)
-            all_result = re_result.sort_values(by = ['날짜'], axis = 0, ascending = False)
+            all_result = re_result.sort_values(by = ['날짜'], axis = 0)
             all_result = all_result.drop_duplicates('날짜', keep = 'first')
             all_result.to_csv(csv, mode = 'w')
         else:

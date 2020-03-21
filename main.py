@@ -27,8 +27,9 @@ driver = webdriver.Chrome(executable_path = '/usr/bin/chromedriver', options=chr
     #'/home/prohenho7138/Downloads/chromedriver'
 driver.implicitly_wait(1)
 
-def crawling_table(code, page, csv, get_path):
+def crawling_table(drivers, code, page, csv, get_path):
     try:
+        driver = drivers
         site = 'https://finance.naver.com/item/sise_day.nhn?code={code}&page={page}'.format(code = code, page = page)
         driver.get(site)
         #https://finance.naver.com/item/sise_day.nhn?code=263750&page=1
@@ -40,7 +41,7 @@ def crawling_table(code, page, csv, get_path):
         driver.close()
     
         tabs = driver.window_handles
-        driver.switch_to_window(tabs[-1])
+        driver.switch_to.window(tabs[-1])
         
         return soup
     except Exception as error:
@@ -77,18 +78,18 @@ def create_csv(data, csv):
     return None
 
 ######################################################
-
-code = 263750 #펄어비스
+#263750 펄어비스
+code = '005930' #삼성
 page = 1
 csv = './code/{code}/{code}.csv'.format(code = code)
 png = './code/{code}/{code}.png'.format(code = code)
 get_path = './code/{code}'.format(code = code)
 
-result = crawling_table(code, page, csv, get_path)
+result = crawling_table(driver, code, page, csv, get_path)
 len_table = len_table(result)
 
 for page in range(1, int(len_table) + 1):
-    result = crawling_table(code, page, csv, get_path)
+    result = crawling_table(driver, code, page, csv, get_path)
     result = pd.read_html(str(result.find('table')), header = 0)[0]
     result = result.dropna()
     if os.path.isdir(get_path):
